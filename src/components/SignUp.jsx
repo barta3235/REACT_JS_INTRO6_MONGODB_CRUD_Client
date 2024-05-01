@@ -1,5 +1,6 @@
 import { useContext } from "react";
 import { AuthContext } from "../providers/AuthProvider";
+import axios from "axios";
 
 const SignUp = () => {
 
@@ -17,26 +18,41 @@ const SignUp = () => {
         .then((result)=>{
             console.log(result.user);
             // new user has been created
-
-
-
             const createdAt= result.user.metadata.creationTime;
             const user= {email,createdAt};
+
             
-            fetch('http://localhost:5005/user',{
-                method:'POST',
-                headers:{
-                    'content-type':'application/json'
-                },
-                body: JSON.stringify(user),
-            })
-            .then(res=>res.json())
-            .then((data)=>{
-                console.log(data);
-                if(data.insertedId){
+            //using AXIOS
+            axios.post('http://localhost:5005/user',user)
+            .then(data=>{
+                console.log(data.data);
+                if(data.data.insertedId){
                     alert('Successfully signed up')
                 }
             })
+
+
+
+
+
+            // using fetch
+            // fetch('http://localhost:5005/user',{
+            //     method:'POST',
+            //     headers:{
+            //         'content-type':'application/json'
+            //     },
+            //     body: JSON.stringify(user),
+            // })
+            // .then(res=>res.json())
+            // .then((data)=>{
+            //     console.log(data);
+            //     if(data.insertedId){
+            //         alert('Successfully signed up')
+            //     }
+            // })
+
+       // data has went to the database
+
         })
         .catch((error)=>{
             console.log(error.message)
